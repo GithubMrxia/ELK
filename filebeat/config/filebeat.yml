@@ -1,0 +1,23 @@
+path.home: /usr/share/filebeat
+path.config: /usr/share/filebeat
+path.data: /usr/share/filebeat/data
+path.logs: /usr/share/filebeat/logs
+filebeat.config:
+  inputs:
+    enabled: true
+    path: inputs.d/*.yml
+    reload.enabled: true
+    reload.period: 10s
+  modules:
+    enabled: true
+    path: modules.d/*.yml
+    reload.enabled: true
+    reload.period: 10s
+
+output.logstash:
+  enabled: true
+  hosts: [ "logstash:5044" ]
+
+output.elasticsearch:
+  enabled: false
+  hosts: [ "http://elasticsearch:9200" ]
