@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.7'
 
 services:
   elasticsearch:
@@ -14,25 +14,9 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
-    networks:
-      - elk
-    restart: unless-stopped
-
-  filebeat:
-    build:
-      context: ./filebeat
-      args:
-        ELK_VERSION: ${ELK_VERSION}
-    container_name: filebeat
-    volumes:
-      - ./filebeat/app.log:/var/log/app.log
-      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
-      - ./filebeat/config/inputs.d:/usr/share/filebeat/inputs.d
-      - ./filebeat/config/modules.d:/usr/share/filebeat/modules.d
-      # - /var/run/docker.sock:/var/run/docker.sock
-    # user: root
-    depends_on:
-      - elasticsearch
+    environment:
+      ES_JAVA_OPTS: "-Xmx1024m -Xms1024m"
+      ELASTIC_PASSWORD: changeme
     networks:
       - elk
     restart: unless-stopped
@@ -51,8 +35,29 @@ services:
       - "5000:5000/udp"
       - "5044:5044"
       - "9600:9600"
+    environment:
+      LS_JAVA_OPTS: "-Xmx512m -Xms512m"
     depends_on:
       - elasticsearch
+    networks:
+      - elk
+    restart: unless-stopped
+
+  filebeat:
+    build:
+      context: ./filebeat
+      args:
+        ELK_VERSION: ${ELK_VERSION}
+    container_name: filebeat
+    volumes:
+      - ./filebeat/app.log:/var/log/app.log
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./filebeat/config/inputs.d:/usr/share/filebeat/inputs.d
+      - ./filebeat/config/modules.d:/usr/share/filebeat/modules.d
+      # - /var/run/docker.sock:/var/run/docker.sock
+    # user: root
+    depends_on:
+      - logstash
     networks:
       - elk
     restart: unless-stopped
@@ -75,4 +80,5 @@ services:
 
 networks:
   elk:
+    name: elk
     driver: bridge

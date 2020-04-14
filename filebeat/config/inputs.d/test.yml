@@ -2,4 +2,4 @@
   enabled: true
   paths:
     - /var/log/app.log
-  # index: tetetete
+  index: app

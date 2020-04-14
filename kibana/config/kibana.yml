@@ -8,5 +8,5 @@ i18n.locale: "zh-CN"
 
 ## X-Pack security credentials
 #
-# elasticsearch.username: elastic
-# elasticsearch.password: changeme
+elasticsearch.username: elastic
+elasticsearch.password: changeme
