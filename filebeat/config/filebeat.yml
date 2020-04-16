@@ -14,8 +14,16 @@ filebeat.config:
     reload.enabled: true
     reload.period: 10s
 
-output.logstash:
+output.redis:
   enabled: true
+  hosts: [ "redis:6379" ]
+  key: "filebeat"
+  datatype: "list"
+  db: 0
+  timeout: 5
+
+output.logstash:
+  enabled: false
   hosts: [ "logstash:5044" ]
 
 output.elasticsearch:

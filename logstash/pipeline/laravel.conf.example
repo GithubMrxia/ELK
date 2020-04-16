@@ -1,0 +1,43 @@
+input {
+	redis {
+		host => "redis"
+		port => "6379"
+		key => "filebeat"
+		data_type => "list"
+		threads => 5
+		timeout => 5
+	}
+	# beats {
+	# 	port => "5044"
+	# }
+}
+
+## Add your filters / logstash plugins configuration here
+
+filter {
+
+	grok {
+		match => {
+			"message" => "^\[(?<created_date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\]\s(?<log_env>\w+).(?<log_level>\w+):\s(?<message_info>(.|\n)*)"
+		}
+	}
+
+	date {
+		match => ["created_date", "yyyy-MM-dd HH:mm:ss"]
+		target => "@timestamp"
+		# 必须加市区，不然转换不了
+	    timezone => "Asia/Shanghai"
+		remove_field => ["created_date"]
+	}
+
+}
+
+output {
+	elasticsearch {
+		hosts => ["http://elasticsearch:9200"]
+		index => "%{project}"
+		document_type => "%{[@metadata][type]}"
+		user => "elastic"
+		password => "changeme"
+	}
+}

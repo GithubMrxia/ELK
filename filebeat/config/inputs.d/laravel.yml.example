@@ -1,0 +1,12 @@
+- type: log
+  enabled: true
+  paths:
+    - /var/log/logs/project/*.log
+  multiline.pattern: '^\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\] \w+\.\w+:'
+  multiline.negate: true
+  multiline.match: after
+  index: project
+  fields:
+    env: develop
+    project: project
+  fields_under_root: true

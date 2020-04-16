@@ -1,5 +1,0 @@
-- type: log
-  enabled: true
-  paths:
-    - /var/log/app.log
-  index: app

@@ -29,14 +29,14 @@ services:
     container_name: logstash
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/patterns:/usr/share/logstash/patterns
       - ./logstash/pipeline:/usr/share/logstash/pipeline
     ports:
-      - "5000:5000/tcp"
-      - "5000:5000/udp"
       - "5044:5044"
       - "9600:9600"
     environment:
       LS_JAVA_OPTS: "-Xmx512m -Xms512m"
+      LOG_LEVEL: debug
     depends_on:
       - elasticsearch
     networks:
@@ -50,12 +50,10 @@ services:
         ELK_VERSION: ${ELK_VERSION}
     container_name: filebeat
     volumes:
-      - ./filebeat/app.log:/var/log/app.log
+      - ./logs:/var/log/logs
       - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./filebeat/config/inputs.d:/usr/share/filebeat/inputs.d
       - ./filebeat/config/modules.d:/usr/share/filebeat/modules.d
-      # - /var/run/docker.sock:/var/run/docker.sock
-    # user: root
     depends_on:
       - logstash
     networks:
@@ -74,6 +72,20 @@ services:
      - 5601:5601
     depends_on:
       - elasticsearch
+    networks:
+      - elk
+    restart: unless-stopped
+
+
+  redis:
+    image: redis:5.0-alpine
+    container_name: redis
+    # ports:
+      # - 6379:6379
+    volumes:
+      - ./redis/data:/data
+      - ./redis/etc/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
     networks:
       - elk
     restart: unless-stopped
