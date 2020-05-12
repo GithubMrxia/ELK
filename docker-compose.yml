@@ -16,7 +16,7 @@ services:
       - 9300:9300
     environment:
       ES_JAVA_OPTS: "-Xmx1024m -Xms1024m"
-      ELASTIC_PASSWORD: changeme
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
     networks:
       - elk
     restart: unless-stopped
@@ -50,7 +50,7 @@ services:
         ELK_VERSION: ${ELK_VERSION}
     container_name: filebeat
     volumes:
-      - ./logs:/var/log/logs
+      - ${LOG_PATH}:/var/log/logs
       - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./filebeat/config/inputs.d:/usr/share/filebeat/inputs.d
       - ./filebeat/config/modules.d:/usr/share/filebeat/modules.d

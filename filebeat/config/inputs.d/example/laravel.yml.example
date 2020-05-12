@@ -2,6 +2,7 @@
   enabled: true
   paths:
     - /var/log/logs/project/*.log
+  index:laravel
   multiline.pattern: '^\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\] \w+\.\w+:'
   multiline.negate: true
   multiline.match: after

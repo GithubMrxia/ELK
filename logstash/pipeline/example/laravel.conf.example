@@ -25,7 +25,7 @@ filter {
 	date {
 		match => ["created_date", "yyyy-MM-dd HH:mm:ss"]
 		target => "@timestamp"
-		# 必须加市区，不然转换不了
+		# 必须加时区，不然转换不了
 	    timezone => "Asia/Shanghai"
 		remove_field => ["created_date"]
 	}
