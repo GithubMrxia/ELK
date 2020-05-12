@@ -11,9 +11,9 @@ services:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./elasticsearch/data:/usr/share/elasticsearch/data
       - ./elasticsearch/logs:/usr/share/elasticsearch/logs
-    ports:
-      - 9200:9200
-      - 9300:9300
+    # ports:
+      # - 9200:9200
+      # - 9300:9300
     environment:
       ES_JAVA_OPTS: "-Xmx1024m -Xms1024m"
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
@@ -31,9 +31,9 @@ services:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./logstash/patterns:/usr/share/logstash/patterns
       - ./logstash/pipeline:/usr/share/logstash/pipeline
-    ports:
-      - "5044:5044"
-      - "9600:9600"
+    # ports:
+      # - "5044:5044"
+      # - "9600:9600"
     environment:
       LS_JAVA_OPTS: "-Xmx512m -Xms512m"
       LOG_LEVEL: debug
@@ -75,7 +75,6 @@ services:
     networks:
       - elk
     restart: unless-stopped
-
 
   redis:
     image: redis:5.0-alpine
